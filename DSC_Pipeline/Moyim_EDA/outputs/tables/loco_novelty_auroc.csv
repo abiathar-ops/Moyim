@@ -1,0 +1,10 @@
+held_out_class,method,auroc,folds
+Bondol Jawa,knn,0.7400892752574535,3
+Bondol Jawa,isolation_forest,0.6421961459884774,3
+Bondol Jawa,max_softmax_prob,0.7325878875012154,3
+Cendrawasih,knn,0.7866706270353855,3
+Cendrawasih,isolation_forest,0.7233002292281251,3
+Cendrawasih,max_softmax_prob,0.5908793424614627,3
+Kutilang,knn,0.6673822391586371,3
+Kutilang,isolation_forest,0.6604412925407662,3
+Kutilang,max_softmax_prob,0.6454331509794305,3
