@@ -1,0 +1,19 @@
+  cached 250/2640
+  cached 500/2640
+  cached 750/2640
+  cached 1000/2640
+  cached 1250/2640
+  cached 1500/2640
+  cached 1750/2640
+  cached 2000/2640
+  cached 2250/2640
+  cached 2500/2640
+  cached 2640/2640
+
+exact duplicate audio: 0 files in 0 sets (0 sets involve train, 0 sets shared between train and test)
+
+level (RMS dBFS) by split:
+       mean  std   min   max
+split                       
+test  -21.4  2.8 -33.2 -13.9
+train -21.4  2.9 -35.3 -14.4

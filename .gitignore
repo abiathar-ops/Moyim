@@ -1,3 +1,12 @@
 # Competition dataset (large, licensed CC BY-NC 4.0; do not redistribute through git)
 DSC_Dataset/
 DSC_Dataset.zip
+
+# Regenerable pipeline cache (1.7 GB decoded audio) - rebuild with scripts/02_cache_audio.py
+DSC_Pipeline/cache/
+
+# OS / Python clutter
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
