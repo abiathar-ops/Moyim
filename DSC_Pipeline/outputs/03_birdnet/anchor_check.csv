@@ -1,0 +1,6 @@
+file,anchor_macroF1,Bondol Jawa,Cendrawasih,Kutilang,Unknown,known anchors → Unknown
+submission_novelty_r55.csv,0.802,24/29,4/5,37/42,88/95,7
+submission_novelty_r45.csv,0.788,25/29,4/5,38/42,83/95,5
+submission_novelty_r35.csv,0.766,25/29,4/5,39/42,79/95,4
+submission_birdnet_baseline1d.csv,0.651,19/29,5/5,41/42,49/95,9
+submission_birdnet_baseline1d_q97.csv,0.48,25/29,5/5,41/42,10/95,2

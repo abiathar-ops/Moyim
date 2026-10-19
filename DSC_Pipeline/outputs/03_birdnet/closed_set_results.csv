@@ -1,0 +1,9 @@
+pool,model,group_cv_f1,random_cv_f1,rec_bondol,rec_cendrawasih,rec_kutilang
+mean+max,svm_rbf,0.878,0.97,0.964,0.747,0.998
+mean+max,logreg,0.864,0.985,0.941,0.819,0.998
+mean,svm_rbf,0.863,0.96,0.955,0.735,0.998
+mean+max,lda,0.861,0.97,0.958,0.699,0.998
+mean,logreg,0.859,0.977,0.939,0.807,0.998
+mean,lda,0.833,0.962,0.956,0.59,0.997
+mean+max,knn_cos,0.806,0.872,0.98,0.313,0.994
+mean,knn_cos,0.795,0.852,0.986,0.289,0.977
