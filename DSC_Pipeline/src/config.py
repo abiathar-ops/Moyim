@@ -13,6 +13,10 @@ _DEFAULT_DATA = next((p for p in (PIPELINE_DIR.parent / "DSC_Dataset", PIPELINE_
 DATA_DIR = Path(os.environ.get("NPC_DATA", _DEFAULT_DATA))
 CACHE_DIR = Path(os.environ.get("NPC_CACHE", PIPELINE_DIR / "cache"))
 OUT_DIR = PIPELINE_DIR / "outputs"
+MODELS_DIR = OUT_DIR / "models"            # model_fold*.pt, oof_cnn.csv, train_log.json, unknown_threshold.json
+SUBMISSION_DIR = OUT_DIR / "submission"    # submission.csv, test_probs.csv
+EDA_DIR = OUT_DIR / "eda"                  # stage-01 tables, figures, report
+PREP_DIR = OUT_DIR / "preprocessing"       # stage-02 inventory, activity, frontend comparison
 
 TRAIN_META = DATA_DIR / "train" / "metadata.csv"
 SAMPLE_SUB = DATA_DIR / "sample_submission.csv"
@@ -27,6 +31,16 @@ NOISE_CACHE = CACHE_DIR / "noise"          # cache/noise/<file_id>_<k>.npy
 CLASSES = ["Bondol Jawa", "Cendrawasih", "Kutilang"]
 UNKNOWN = "Unknown"
 CLASS_TO_IDX = {c: i for i, c in enumerate(CLASSES)}
+
+# ---------------------------------------------------------------- submission format
+# Output file matches the organiser template (Arif_01_Submission.csv):
+#   header "file_id,label"; one row per test clip in sample_submission order;
+#   labels in {CLASSES, UNKNOWN}; comma-separated, no index/quotes/BOM; CRLF
+#   line endings, including after the final row.
+AUTHOR = "Arif"            # -> {AUTHOR}_{SUBMISSION_NO:02d}_Submission.csv
+SUBMISSION_NO = 1          # bump for every new upload (Arif_01 -> Arif_02 ...)
+SUB_COLS = ["file_id", "label"]
+SUB_EOL = "\r\n"
 
 # ---------------------------------------------------------------- audio
 ORIG_SR = 48_000
@@ -58,3 +72,9 @@ NOISE_QUANTILE = 0.30              # frames below this activity quantile count a
 N_FOLDS = 4                 # Cendrawasih has only 4 source groups
 FOLD_SEED_SEARCH = 300      # seeds tried to find the most class-balanced group split
 SEED = 42
+
+
+def ensure_output_dirs():
+    """Create the outputs/ subtree so stage scripts can write without mkdir noise."""
+    for d in (OUT_DIR, MODELS_DIR, SUBMISSION_DIR, EDA_DIR, PREP_DIR):
+        d.mkdir(parents=True, exist_ok=True)

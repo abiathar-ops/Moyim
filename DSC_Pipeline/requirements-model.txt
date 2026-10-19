@@ -1,0 +1,10 @@
+# Extra dependencies for training/inference (on top of the EDA/preprocessing reqs).
+# On Kaggle these are preinstalled; locally install torch for your platform/CUDA.
+torch>=2.1
+numpy
+pandas
+scipy
+scikit-learn
+librosa>=0.10
+soundfile
+joblib

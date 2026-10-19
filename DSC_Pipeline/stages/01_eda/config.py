@@ -15,8 +15,8 @@ KNOWN_CLASSES = ["Bondol Jawa", "Cendrawasih", "Kutilang"]
 ALL_LABELS = KNOWN_CLASSES + ["Unknown"]
 
 HERE = Path(__file__).resolve().parent
-ROOT = Path(os.environ.get("DSC_ROOT", HERE.parents[1]))
-OUT = Path(os.environ.get("DSC_OUT", HERE / "outputs"))
+ROOT = Path(os.environ.get("DSC_ROOT", HERE.parents[2]))
+OUT = Path(os.environ.get("DSC_OUT", HERE.parents[1] / "outputs" / "eda"))
 TABLES = OUT / "tables"
 FIGS = OUT / "figures"
 

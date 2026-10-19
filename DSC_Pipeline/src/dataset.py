@@ -82,3 +82,52 @@ class BirdWindowDataset(_Base):
             S = A.spec_augment(S, self.rng)
         label = int(row.y) if "y" in row and not pd.isna(row.y) else -1
         return S[None].astype(np.float32), label
+
+
+def submission_name():
+    """The organiser's file name: ``{AUTHOR}_{SUBMISSION_NO:02d}_Submission.csv``."""
+    return f"{C.AUTHOR}_{C.SUBMISSION_NO:02d}_Submission.csv"
+
+
+def write_submission(out, sample_sub, out_dir=None):
+    """Write predictions in the exact template format of Arif_01_Submission.csv.
+
+    Format contract (verified byte-for-byte against the template):
+      * columns ``file_id,label`` in that order, no index column;
+      * one row per test clip, in ``sample_submission.csv`` order;
+      * labels restricted to the 3 species + ``Unknown``;
+      * no quotes, no BOM; CRLF (``\\r\\n``) line endings, including after the
+        final row.
+
+    ``out`` must have columns file_id,label. Writes ``{AUTHOR}_{NN}_Submission.csv``
+    and an identical ``submission.csv`` into ``out_dir`` (default C.SUBMISSION_DIR),
+    then re-reads to confirm the saved bytes really match the template.
+    Returns the path to the named submission file.
+    """
+    out_dir = C.SUBMISSION_DIR if out_dir is None else out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out[C.SUB_COLS].copy()
+    assert out["label"].notna().all(), "some test clips have no prediction"
+    assert out["file_id"].tolist() == sample_sub["file_id"].tolist(), \
+        "file_id values/order differ from sample_submission.csv"
+    allowed = set(C.CLASSES) | {C.UNKNOWN}
+    bad = sorted(set(out["label"]) - allowed)
+    assert not bad, f"labels outside the template: {bad}"
+
+    # to_csv ends lines with LF on Linux/Kaggle and CRLF on Windows; normalise to
+    # CRLF and write bytes so Windows can't turn CRLF into CR-CR-LF.
+    txt = out.to_csv(index=False).replace("\r\n", "\n").replace("\n", C.SUB_EOL)
+    path = out_dir / submission_name()
+    path.write_bytes(txt.encode("utf-8"))
+
+    # verify the saved file is really in template format
+    raw = path.read_bytes()
+    assert raw.startswith((",".join(C.SUB_COLS) + C.SUB_EOL).encode()), "header differs from template"
+    assert raw.endswith(C.SUB_EOL.encode()) and raw.count(b"\n") == raw.count(b"\r\n") == len(out) + 1, \
+        "line endings differ from template"
+    back = pd.read_csv(path, dtype=str, keep_default_na=False)
+    assert back.values.tolist() == out.astype(str).values.tolist(), "saved rows differ from predictions"
+
+    # identical copy under the generic name, same bytes
+    (out_dir / "submission.csv").write_bytes(raw)
+    return path

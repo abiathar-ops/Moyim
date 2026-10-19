@@ -2,7 +2,7 @@
 DSC_Dataset/
 DSC_Dataset.zip
 
-# Regenerable pipeline cache (1.7 GB decoded audio) - rebuild with scripts/02_cache_audio.py
+# Regenerable pipeline cache (1.7 GB decoded audio) - rebuild with stages/02_preprocessing/02_cache_audio.py
 DSC_Pipeline/cache/
 
 # OS / Python clutter
@@ -10,3 +10,8 @@ DSC_Pipeline/cache/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# pipeline caches & large model artifacts
+DSC_Pipeline/outputs/models/*.pt
+DSC_Pipeline/stages/01_eda/outputs/
+DSC_Pipeline/outputs/eda/tables/_cache/

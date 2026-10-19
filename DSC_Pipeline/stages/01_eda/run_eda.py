@@ -5,7 +5,7 @@
     03_plots.py             figures
     04_report.py            outputs/EDA_REPORT.md
 
-Set DSC_ROOT to the dataset root if this folder is not inside it (default: two levels up).
+Set DSC_ROOT to the dataset root if this folder is not inside it (default: three levels up (repo/DSC_Pipeline/stages/01_eda -> DSC_Moyim)).
 """
 import argparse
 import subprocess
