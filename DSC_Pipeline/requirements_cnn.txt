@@ -1,0 +1,10 @@
+# For scripts/11_train_cnn.py on the GPU PC.
+# Install PyTorch FIRST with the CUDA build from https://pytorch.org/get-started/locally/
+#   e.g. (Windows or Linux, NVIDIA RTX 3060):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+# then:
+timm>=1.0
+librosa>=0.10
+numpy
+pandas
+scikit-learn

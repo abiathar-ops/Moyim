@@ -25,13 +25,16 @@ import pandas as pd
 HERE = Path(__file__).resolve().parent
 LABELS = ["Bondol Jawa", "Cendrawasih", "Kutilang", "Unknown"]
 N_BOOT = 2000
-# Public-LB estimate = LB_RATIO * core anchor F1. Fitted on the 6 calibration
-# submissions below; leave-one-out error 0.01-0.03 for 5 of them, 0.07 for one
+# Public-LB estimate = LB_RATIO * core anchor F1 (median of LB/anchor over the
+# 8 calibration submissions below, refitted 2026-10-20). Leave-one-out error
+# <= 0.008 for 6 of 8; -0.03 for the 65%-Unknown file and -0.075 for the one
 # with only 16% Unknown. The public LB itself (~244 clips) moves about +-0.03.
-LB_RATIO = 0.795
+LB_RATIO = 0.769
 # Calibration: anchor scores of submissions whose public leaderboard score is known
-# (core-anchor macro-F1 reproduced the public-LB order of all 6, 15/15 pairs)
-REFERENCE = [("friend: submission.csv", 0.621, 0.769),
+# (core-anchor macro-F1 reproduced the public-LB order of all 8)
+REFERENCE = [("v3_cend45_veto (Danta)", 0.682, 0.885),
+             ("v2_r50 (Danta)", 0.632, 0.826),
+             ("friend: submission.csv", 0.621, 0.769),
              ("friend: submission_v3_pi40.csv", 0.589, 0.758),
              ("SVM + msp, 51% Unknown", 0.577, 0.752),
              ("friend: submission_v2_pi25.csv", 0.566, 0.743),
@@ -128,7 +131,7 @@ def main():
         r = anchor_report(labels, anchors, munia)
         r["name"], r["unknown_share"] = name, unk
         results.append(r)
-        print(f"  Estimated public LB: ~{LB_RATIO * r['f1']:.3f}  (typically within +-0.03)")
+        print(f"  Estimated public LB: ~{LB_RATIO * r['f1']:.3f}  (typically within +-0.01-0.03)")
         print(f"  Core anchor macro-F1: {r['f1']:.3f}  (95% bootstrap interval {r['lo']:.3f}-{r['hi']:.3f})")
         print("  Core anchors correct: " + ", ".join(f"{c} {k}/{n}" for c, (k, n) in r["per_class"].items()))
         print(f"  Known-bird anchors wrongly called Unknown: {r['known_to_unknown']}")
@@ -157,7 +160,7 @@ def main():
             print(f"  vs {r['name']}: better in {wins:.0%} of resamples ({verdict}); "
                   f"they disagree on {diff} of {len(t)} anchor clips")
 
-    print("\nCalibration (public LB vs estimate; same order for all 6):")
+    print("\nCalibration (public LB vs estimate; same order for all 8):")
     for n, lb, an in REFERENCE:
         print(f"  {n}: LB {lb:.3f}, estimate {LB_RATIO * an:.3f}")
     print("Trust the ranking more than the number; differences under ~0.02 are noise. The 50 munia clips are not in the estimate.")

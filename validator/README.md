@@ -39,25 +39,29 @@ The script exits with code 1 if any file has a format problem.
 |---|---|
 | `FORMAT` | Exact columns `file_id,label`, all 814 test `file_id`s exactly once, labels spelled exactly `Bondol Jawa`, `Cendrawasih`, `Kutilang`, `Unknown`. Typos get a "did you mean" hint. |
 | `Prediction mix` | Share of each label over all 814 clips. Leaderboard evidence so far suggests roughly **40–50% of test is `Unknown`**; you get a note outside 30–60%. |
-| `Estimated public LB` | 0.795 × core anchor F1, calibrated on six real leaderboard scores. Typically within ±0.03. |
+| `Estimated public LB` | 0.769 × core anchor F1, calibrated on eight real leaderboard scores. Typically within ±0.01–0.03. |
 | `Core anchor macro-F1` | Same metric as Kaggle (macro-F1 over the 4 labels), computed only on the 121 core anchor clips. The interval is a 95% bootstrap interval. |
 | `White-rumped Munia clips` | How the file labels the 50 unresolved clips. Not part of the score. |
 | `Anchors correct` | Per label: correct / number of anchors. |
 | `Known-bird anchors wrongly called Unknown` | Cost of rejecting too aggressively. |
 | Pairwise comparison | Resamples the anchor clips 2,000 times and counts how often the top file beats each other file. Under 80% means *too close to call*: don't spend a submission to choose between them on this basis alone. |
 
-**Calibration.** Six submissions with known public scores. The core anchor score puts all six in the **same order as the public leaderboard** (15 of 15 pairs):
+**Calibration.** Eight submissions with known public scores. The core anchor score puts all eight in the **same order as the public leaderboard**:
 
-| Submission | Public LB | Core anchor macro-F1 | Munia clips → Unknown |
+| Submission | Public LB | Core anchor macro-F1 | Estimate (0.769×) |
 |---|---|---|---|
-| submission.csv (Arif) | 0.621 | 0.769 | 45/50 |
-| submission_v3_pi40.csv (Arif) | 0.589 | 0.758 | 4/50 |
-| SVM + confidence rejection, 51% Unknown (Danta) | 0.577 | 0.752 | 16/50 |
-| submission_v2_pi25.csv (Arif) | 0.566 | 0.743 | 45/50 |
-| submission_v2.csv (Arif) | 0.552 | 0.727 | 43/50 |
-| SVM + confidence rejection, 16% Unknown (Danta) | 0.531 | 0.594 | 0/50 |
+| v3_cend45_veto (Danta) | 0.682 | 0.885 | 0.681 |
+| v2_r50 (Danta) | 0.632 | 0.826 | 0.635 |
+| submission.csv (Arif) | 0.621 | 0.769 | 0.591 |
+| submission_v3_pi40.csv (Arif) | 0.589 | 0.758 | 0.583 |
+| SVM + confidence rejection, 51% Unknown (Danta) | 0.577 | 0.752 | 0.578 |
+| submission_v2_pi25.csv (Arif) | 0.566 | 0.743 | 0.571 |
+| submission_v2.csv (Arif) | 0.552 | 0.727 | 0.559 |
+| SVM + confidence rejection, 16% Unknown (Danta) | 0.531 | 0.594 | 0.457 |
 
-Anchor F1 is higher than the leaderboard because anchors are the "easy" clips. The validator therefore also prints an **estimated public LB = 0.795 × core anchor F1**. Tested leave-one-out on these six, the estimate is within 0.01–0.03 for five of them and 0.07 off for the one with only 16% Unknown. The public LB itself (~244 clips) moves about ±0.03, so treat differences under ~0.02 as noise and trust the ranking more than the exact number. Six points is a small calibration set, and the White-rumped Munia split was decided after seeing these results, so keep checking it against new leaderboard scores.
+The validator prints an **estimated public LB = 0.769 × core anchor F1** (median ratio over these eight, refitted 2026-10-20). Leave-one-out, it is within ±0.008 for six of them; it underestimates files with very many Unknowns (−0.03 at 65%) or very few (−0.075 at 16%). The public LB itself (~244 clips) moves about ±0.03, so treat differences under ~0.02 as noise and trust the ranking more than the exact number. The White-rumped Munia split was decided after seeing early results, so keep checking it against new leaderboard scores.
+
+**Blind spots found so far:** the validator can't judge Cendrawasih (5 anchors) and can't see Unknown birds that BirdNET can't name (its Unknown anchors are BirdNET-nameable species). Changes that mainly remove such hidden Unknowns, e.g. the Kutilang veto, look slightly worse here than they probably are.
 
 ## The White-rumped Munia question
 
